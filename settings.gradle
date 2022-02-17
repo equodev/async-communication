@@ -1,0 +1,20 @@
+buildscript {
+  ext.repos = {
+    mavenCentral()
+    gradlePluginPortal()
+  }
+  ext.deps = {
+    classpath 'biz.aQute.bnd:biz.aQute.bnd.gradle:5.3.0'
+  }
+  repositories repos
+  dependencies deps
+}
+
+gradle.rootProject {
+  buildscript {
+    repositories repos
+    dependencies deps
+  }
+}
+
+apply plugin: 'biz.aQute.bnd.workspace'

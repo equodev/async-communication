@@ -34,7 +34,7 @@ import org.osgi.service.component.annotations.ReferencePolicy;
  * Implements the handler actions for send and received web-socket events using
  * equoCommService instance.
  */
-@Component
+@Component(immediate = true)
 public class EquoEventHandler implements IEquoEventHandler {
 
   private IEquoCommService equoCommService;

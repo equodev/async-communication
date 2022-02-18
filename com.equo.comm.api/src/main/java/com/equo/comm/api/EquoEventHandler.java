@@ -22,6 +22,7 @@
 
 package com.equo.comm.api;
 
+import java.util.concurrent.Future;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -40,13 +41,13 @@ public class EquoEventHandler implements IEquoEventHandler {
   private IEquoCommService equoCommService;
 
   @Override
-  public void send(String userEvent) {
-    this.send(userEvent, null);
+  public <T> Future<T> send(String userEvent) {
+    return this.send(userEvent, null);
   }
 
   @Override
-  public void send(String userEvent, Object payload) {
-    equoCommService.send(userEvent, payload);
+  public <T> Future<T> send(String userEvent, Object payload) {
+    return equoCommService.send(userEvent, payload);
   }
 
   @Override

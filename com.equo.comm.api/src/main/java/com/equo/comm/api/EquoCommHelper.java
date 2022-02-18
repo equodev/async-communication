@@ -22,6 +22,7 @@
 
 package com.equo.comm.api;
 
+import java.util.concurrent.Future;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -79,9 +80,9 @@ public class EquoCommHelper {
     }
 
     @Override
-    public void send(String userEvent, Object payload) {
+    public <T> Future<T> send(String userEvent, Object payload) {
       obtainInstance();
-      instance.send(userEvent, payload);
+      return instance.send(userEvent, payload);
     }
 
     @Override

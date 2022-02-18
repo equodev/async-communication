@@ -20,7 +20,7 @@
 **
 ****************************************************************************/
 
-package com.equo.ws.provider;
+package com.equo.comm.ws.provider;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;

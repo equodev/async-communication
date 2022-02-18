@@ -20,7 +20,7 @@
 **
 ****************************************************************************/
 
-package com.equo.ws.provider;
+package com.equo.comm.ws.provider;
 
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -64,8 +64,8 @@ class EquoWebSocketServer extends WebSocketServer {
   @Override
   public void onOpen(WebSocket conn, ClientHandshake handshake) {
     broadcast("new connection: " + handshake.getResourceDescriptor());
-    logger.debug(conn.getRemoteSocketAddress().getAddress().getHostAddress()
-        + " entered the Equo SDK!");
+    logger.debug(
+        conn.getRemoteSocketAddress().getAddress().getHostAddress() + " entered the Equo SDK!");
     this.firstClientConnected = true;
     synchronized (messagesToSend) {
       for (String messageToSend : messagesToSend) {
@@ -120,9 +120,9 @@ class EquoWebSocketServer extends WebSocketServer {
         Consumer<?> consumer = consumerActionHandlers.get(actionId);
         ((Consumer<Object>) consumer).accept(parsedPayload);
       }
-      if (actionMessage.getCallerUuid() != null && response != null) {
-        NamedActionMessage responseMessage =
-            new NamedActionMessage(actionMessage.getCallerUuid(), response);
+      String callbackId = actionMessage.getCallbackId();
+      if (callbackId != null && response != null) {
+        NamedActionMessage responseMessage = new NamedActionMessage(callbackId, response);
         super.broadcast(gsonParser.toJson(responseMessage));
       }
     } else if (broadcast) {

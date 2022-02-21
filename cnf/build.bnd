@@ -18,13 +18,6 @@ Bundle-Version:             1.0.0.${tstamp}
  	name = "Eclipse"; \
  	location = ~/.bnd/cache/eclipse4-16
 
--plugin.middleware: \
-    aQute.bnd.repository.osgi.OSGiRepository; \
-        name = "Middleware"; \
-        locations = "https://dl.equo.dev/middleware/1.1/repo/index.xml.gz"; \
-        poll.time = -1; \
-        cache = ~/.bnd/cache/middleware
-
 -plugin.sdkcore: \
     aQute.bnd.repository.osgi.OSGiRepository; \
         name = "SDK Core"; \

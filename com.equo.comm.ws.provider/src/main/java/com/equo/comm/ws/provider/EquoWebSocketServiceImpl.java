@@ -61,11 +61,11 @@ public class EquoWebSocketServiceImpl implements IEquoCommService {
   protected static final Logger logger = LoggerFactory.getLogger(EquoWebSocketServiceImpl.class);
 
   private Gson gsonParser = new Gson();
+
   private Map<String, Function<?, ?>> functionActionHandlers = new HashMap<>();
   private Map<String, Consumer<?>> consumerActionHandlers = new HashMap<>();
-  private Map<String, Class<?>> actionParamTypes = new HashMap<>();
-
   private Map<String, CompletableFuture<Object>> responseActionHandlers = new HashMap<>();
+  private Map<String, Class<?>> actionParamTypes = new HashMap<>();
 
   private EquoWebSocketServer equoWebSocketServer;
 
@@ -112,27 +112,36 @@ public class EquoWebSocketServiceImpl implements IEquoCommService {
     }
   }
 
-  @SuppressWarnings("unchecked")
   @Override
-  public <T> Future<T> send(String userEvent, Object payload) {
+  public void send(String userEvent, Object payload) {
+    NamedActionMessage namedActionMessage = new NamedActionMessage(userEvent, payload);
+    String messageAsJson = gsonParser.toJson(namedActionMessage);
+    equoWebSocketServer.broadcast(messageAsJson);
+  }
+
+  @Override
+  public <T> Future<T> send(String userEvent, Object payload, Class<T> responseTypeClass) {
     return CompletableFuture.supplyAsync(() -> {
-      String uuid = UUID.randomUUID().toString();
-      NamedActionMessage namedActionMessage = new NamedActionMessage(userEvent, payload, uuid);
-      String messageAsJson = gsonParser.toJson(namedActionMessage);
-      equoWebSocketServer.broadcast(messageAsJson);
-      CompletableFuture<Object> future = new CompletableFuture<>();
-      responseActionHandlers.put(uuid, future);
-      while (!future.isDone()) {
-        // Sleep?
-      }
       try {
-        return (T) future.get();
+        String uuid = UUID.randomUUID().toString();
+        NamedActionMessage namedActionMessage = new NamedActionMessage(userEvent, payload, uuid);
+        String messageAsJson = gsonParser.toJson(namedActionMessage);
+        equoWebSocketServer.broadcast(messageAsJson);
+        CompletableFuture<Object> future = new CompletableFuture<>();
+        responseActionHandlers.put(uuid, future);
+        while (!future.isDone()) {
+          // Sleep?
+        }
+        return (T) gsonParser.fromJson(future.get().toString(), responseTypeClass);
       } catch (InterruptedException e) {
         logger.debug("Thread was interrupted");
         return null;
       } catch (ExecutionException e) {
         logger.debug(
             "An unexpected exception was thrown when retrieving the response from javascript.");
+        return null;
+      } catch (Exception e) {
+        logger.debug("Unexpected exception");
         return null;
       }
     });

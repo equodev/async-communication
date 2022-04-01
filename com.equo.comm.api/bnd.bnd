@@ -1,0 +1,16 @@
+Bundle-Version: 2.0.0.${tstamp}
+-buildpath: \
+    osgi.cmpn,\
+    org.osgi.framework
+
+Export-Package: \
+	com.equo.comm.api,\
+	com.equo.comm.api.actions,\
+	com.equo.comm.api.annotations,\
+	com.equo.comm.api.error,\
+	com.equo.comm.api.internal,\
+	com.equo.comm.api.internal.util
+
+Import-Package: \
+	java.*;resolution:=optional,\
+	*

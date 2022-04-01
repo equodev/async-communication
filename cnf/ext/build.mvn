@@ -1,6 +1,7 @@
 # OSGi R7
 
-org.osgi:osgi.annotation:7.0.0
+org.osgi:org.osgi.framework:1.9.0
 org.osgi:osgi.cmpn:7.0.0
 
 org.java-websocket:Java-WebSocket:jar:1.5.1
+com.google.code.gson:gson:2.8.9

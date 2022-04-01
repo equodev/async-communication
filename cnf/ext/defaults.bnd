@@ -16,8 +16,7 @@
     osgi.identity;filter:='(osgi.identity=org.osgi.service.*)', \
     osgi.identity;filter:='(osgi.identity=slf4j.*)', \
 
-
--runsystemcapabilities.dflt:    ${native_capability}
+-runsystemcapabilities.dflt: ${native_capability}
 
 debug-bundles: \
     osgi.identity;filter:='(osgi.identity=osgi.enroute.webconsole.xray.provider)',\

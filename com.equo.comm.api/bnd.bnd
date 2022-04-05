@@ -1,4 +1,6 @@
 Bundle-Version: 2.0.0.${tstamp}
+Bundle-ActivationPolicy: lazy
+
 -buildpath: \
     osgi.cmpn,\
     org.osgi.framework

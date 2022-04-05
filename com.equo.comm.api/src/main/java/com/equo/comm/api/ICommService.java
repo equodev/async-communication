@@ -91,6 +91,6 @@ public interface ICommService {
    * Removes an event handler.
    * @param actionId the action ID associated with the handler to remove.
    */
-  void removeHandler(String actionId);
+  void remove(String actionId);
 
 }

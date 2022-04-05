@@ -80,7 +80,7 @@ public class CommService implements ICommService {
   }
 
   @Override
-  public void removeHandler(String actionId) {
+  public void remove(String actionId) {
     equoEventHandler.removeEventHandler(actionId);
   }
 

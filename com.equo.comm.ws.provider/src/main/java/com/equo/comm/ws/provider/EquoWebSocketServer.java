@@ -53,6 +53,7 @@ import com.equo.comm.api.annotations.EventName;
 import com.equo.comm.api.error.CommMessageException;
 import com.equo.comm.api.internal.EventMessage;
 import com.equo.comm.api.internal.util.ActionHelper;
+import com.equo.comm.ws.provider.entity.EventErrorMessage;
 import com.equo.logging.client.api.Logger;
 import com.equo.logging.client.api.LoggerFactory;
 import com.google.gson.Gson;
@@ -227,11 +228,18 @@ public class EquoWebSocketServer extends WebSocketServer {
       }
       Function<?, ?> function = functionActionHandlers.get(actionId);
       Object response = null;
-      if (function != null) {
-        response = ((Function<Object, ?>) function).apply(parsedPayload);
-      } else {
-        Consumer<?> consumer = consumerActionHandlers.get(actionId);
-        ((Consumer<Object>) consumer).accept(parsedPayload);
+      try {
+        if (function != null) {
+          response = ((Function<Object, ?>) function).apply(parsedPayload);
+        } else {
+          Consumer<?> consumer = consumerActionHandlers.get(actionId);
+          ((Consumer<Object>) consumer).accept(parsedPayload);
+        }
+      } catch (CommMessageException e) {
+        final EventErrorMessage errorMessage = new EventErrorMessage(actionMessage.getCallbackId(),
+            e.getErrorCode(), e.getLocalizedMessage());
+        super.broadcast(gsonParser.toJson(errorMessage));
+        return;
       }
       if (response != null) {
         EventMessage responseMessage = new EventMessage(actionMessage.getCallbackId(), response);

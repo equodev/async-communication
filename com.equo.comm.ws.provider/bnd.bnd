@@ -1,5 +1,7 @@
 Bundle-Version: 1.0.1.${tstamp}
-Private-Package: com.equo.comm.ws.provider
+Private-Package: \
+	com.equo.comm.ws.provider,\
+	com.equo.comm.ws.provider.entity
 
 -includeresource: \
 	src/main/resources/

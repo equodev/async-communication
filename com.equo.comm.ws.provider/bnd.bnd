@@ -1,6 +1,5 @@
 Bundle-Version: 1.0.1.${tstamp}
 Private-Package: \
-	com.equo.comm.ws.provider,\
 	com.equo.comm.ws.provider.entity
 
 -includeresource: \
@@ -22,3 +21,6 @@ Import-Package: \
 	com.equo.logging.client.api.*,\
 	org.java_websocket.*,\
 	*;resolution:=optional
+
+Export-Package: \
+	com.equo.comm.ws.provider

@@ -27,6 +27,7 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import com.equo.contribution.api.EquoContributionBuilder;
+import com.equo.contribution.api.resolvers.EquoGenericUrlResolver;
 
 /**
  * Websocket contribution, adding websocket javascript API into the app.
@@ -43,6 +44,8 @@ public class EquoWebSocketContribution {
     builder //
         .withScriptFile(EQUO_WEBSOCKET_JS_API) //
         .withContributionName(COMM_CONTRIBUTION_NAME) //
+        .withUrlResolver(
+            new EquoGenericUrlResolver(EquoWebSocketContribution.class.getClassLoader())) //
         .build();
   }
 

@@ -81,8 +81,7 @@ public class CommNormalFlow extends BasicBrowserTest {
     Awaitility.await().timeout(Duration.ofSeconds(25)).untilTrue(success);
   }
 
-  @SuppressWarnings("unused")
-  private static class TestPayload {
+  protected static class TestPayload {
     private String id;
     private int number;
     private float fpNumber;

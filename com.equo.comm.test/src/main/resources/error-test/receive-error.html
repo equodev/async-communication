@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script src="../equo-comm.js"></script>
+    <script>
+        EquoCommService.send("_startTransferReceiveError").catch((error) => {
+            if (error.code === 5 &&
+                error.message === "some message") {
+                EquoCommService.send("successTransferReceiveError");
+            } else {
+                EquoCommService.send("failTransferReceiveError");
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script src="../equo-comm.js"></script>
+    <script>
+        EquoCommService.on("transfer", (payload) => {
+            if (payload.id === "success" &&
+                payload.number == 2.0 &&
+                payload.fpNumber == 3.5 &&
+                payload.dNumber == 5.0) {
+                EquoCommService.send("successTransferReceivePayload");
+            } else {
+                EquoCommService.send("failTransferReceivePayload");
+            }
+        });
+        EquoCommService.send("_startTransferReceivePayload");
+    </script>
+</body>
+
+</html>

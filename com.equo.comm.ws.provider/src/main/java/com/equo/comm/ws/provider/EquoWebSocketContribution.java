@@ -26,35 +26,27 @@ import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
-import com.equo.comm.api.EquoCommContribution;
-import com.equo.comm.api.IEquoCommService;
 import com.equo.contribution.api.EquoContributionBuilder;
+import com.equo.contribution.api.resolvers.EquoGenericUrlResolver;
 
 /**
  * Websocket contribution, adding websocket javascript API into the app.
  */
 @Component
-public class EquoWebSocketContribution extends EquoCommContribution {
-  private static final String EQUO_WEBSOCKET_JS_API = "equoComm.js";
+public class EquoWebSocketContribution {
+  private static final String COMM_CONTRIBUTION_NAME = "equocomm";
+  private static final String EQUO_WEBSOCKET_JS_API = "equo-comm.js";
 
   private EquoContributionBuilder builder;
 
-  private IEquoCommService equoWebSocketService;
-
   @Activate
   protected void activate() {
-    builder.withScriptFile(EQUO_WEBSOCKET_JS_API).withContributionName(COMM_CONTRIBUTION_NAME)
-        .withFiltersAdapterHandler(new EquoWebSocketFiltersAdapterHandler(equoWebSocketService))
+    builder //
+        .withScriptFile(EQUO_WEBSOCKET_JS_API) //
+        .withContributionName(COMM_CONTRIBUTION_NAME) //
+        .withUrlResolver(
+            new EquoGenericUrlResolver(EquoWebSocketContribution.class.getClassLoader())) //
         .build();
-  }
-
-  @Reference
-  void setEquoWebSocketService(IEquoCommService equoWebSocketService) {
-    this.equoWebSocketService = equoWebSocketService;
-  }
-
-  void unsetEquoWebSocketService(IEquoCommService equoWebSocketService) {
-    this.equoWebSocketService = null;
   }
 
   @Reference

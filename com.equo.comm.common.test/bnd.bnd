@@ -1,0 +1,16 @@
+Export-Package: com.equo.comm.common.test
+
+-includeresource: \
+	src/main/resources
+
+-buildpath: \
+	osgi.enroute.junit.wrapper;version="[4.12,5.0)",\
+    assertj-core;version="[3.15.0,4.0.0)",\
+    org.hamcrest;version="[2.2.0,2.3.0)",\
+    org.eclipse.swt,\
+	org.eclipse.swt.gtk.linux.x86_64,\
+	com.equo.chromium;version=latest,\
+	com.equo.testing.common.osgi.core;version=latest,\
+	com.equo.comm.api;version=latest,\
+	org.osgi.framework,\
+	org.awaitility

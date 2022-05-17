@@ -20,32 +20,33 @@
 **
 ****************************************************************************/
 
-package com.equo.comm.ws.provider;
+package com.equo.comm.api.annotations;
 
-import org.littleshoot.proxy.HttpFiltersAdapter;
-
-import com.equo.comm.api.IEquoCommService;
-import com.equo.contribution.api.handler.IFiltersAdapterHandler;
-import com.equo.contribution.api.resolvers.EquoGenericUrlResolver;
-
-import io.netty.handler.codec.http.HttpRequest;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * Adapter handler for websockets contributions.
+ * <p>
+ * Annotation to define the name of the event to be listened to in the annotated
+ * class/method.
+ * </p>
+ * <p>
+ * If a class implementing {@link com.equo.comm.api.actions.IActionHandler} is
+ * annotated, then the
+ * {@link com.equo.comm.api.actions.IActionHandler#call(Object) call} method will
+ * be executed when this event is sent.
+ * </p>
+ * <p>
+ * If a method of a class implementing
+ * {@link com.equo.comm.api.actions.IActionHandler} is annotated, then that method
+ * will be executed when this event is sent.
+ * </p>
  */
-public class EquoWebSocketFiltersAdapterHandler implements IFiltersAdapterHandler {
-
-  private IEquoCommService equoWebSocketService;
-
-  EquoWebSocketFiltersAdapterHandler(IEquoCommService equoWebSocketService) {
-    this.equoWebSocketService = equoWebSocketService;
-  }
-
-  @Override
-  public HttpFiltersAdapter getFiltersAdapter(HttpRequest request) {
-    return new EquoWebsocketJsApiRequestFiltersAdapter(request,
-        new EquoGenericUrlResolver(EquoWebSocketContribution.class.getClassLoader()),
-        this.equoWebSocketService.getPort());
-  }
-
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ ElementType.TYPE, ElementType.METHOD })
+public @interface EventName {
+  /** Gets the event name. */
+  String value();
 }

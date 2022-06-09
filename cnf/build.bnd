@@ -1,5 +1,7 @@
--include ${workspace}/gradle.properties
 Bundle-Version:             1.0.0.${tstamp}
+equo.license: GPL-3.0-or-later;link="https://spdx.org/licenses/GPL-3.0-or-later.html"
+Bundle-License: ${def;license;${equo.license}}
+-include ${workspace}/gradle.properties
 
 # Needed for p2 repo generation
 -plugin.p2.AppLaunch: \

@@ -174,7 +174,7 @@ public class EquoWebSocketServer extends WebSocketServer {
 
   public void send(EventMessage eventMessage) {
     String messageAsJson = gsonParser.toJson(eventMessage);
-    super.broadcast(messageAsJson);
+    broadcast(messageAsJson);
   }
 
   /**

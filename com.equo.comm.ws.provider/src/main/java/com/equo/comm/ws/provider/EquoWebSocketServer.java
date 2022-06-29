@@ -279,9 +279,9 @@ public class EquoWebSocketServer extends WebSocketServer {
 
   @Override
   public void broadcast(String messageAsJson) {
+    receiveMessage(messageAsJson, false);
     if (firstClientConnected) {
       super.broadcast(messageAsJson);
-      receiveMessage(messageAsJson, false);
     } else {
       synchronized (messagesToSend) {
         messagesToSend.add(messageAsJson);

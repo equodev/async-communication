@@ -35,11 +35,12 @@ public class CommWebsocketFlowTest extends CommNormalFlow {
   };
 
   @Override
-  protected void setResourceUrl(String resourcePath) {
+  protected void setFileResourceUrl(String resourcePath) {
     final Browser browser = (Browser) components.get(0);
     final Display display = Display.getDefault();
     display.syncExec(() -> {
-      browser.setUrl("file://" + RESOURCES_DIR + resourcePath + "?equocommport=" + getWebsocketPort());
+      browser
+          .setUrl("file://" + RESOURCES_DIR + resourcePath + "?equocommport=" + getWebsocketPort());
     });
   }
 

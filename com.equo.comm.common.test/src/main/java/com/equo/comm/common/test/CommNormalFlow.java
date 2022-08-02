@@ -9,62 +9,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
 import org.awaitility.Awaitility;
-import org.eclipse.swt.widgets.Display;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.ServiceReference;
 
-import com.equo.chromium.swt.Browser;
-import com.equo.comm.api.ICommService;
 import com.equo.comm.api.error.CommMessageException;
-import com.equo.testing.common.osgi.base.BasicBrowserTest;
 
-public class CommNormalFlow extends BasicBrowserTest {
-
-  protected static final BundleContext context =
-      FrameworkUtil.getBundle(CommNormalFlow.class).getBundleContext();
-
-  protected static final String PWD = System.getProperty("user.dir") + "/";
-  protected static final String RESOURCES_DIR = PWD + "src/main/resources/";
-
-  protected static ICommService getCommService() {
-    ServiceReference<ICommService> svcref = context.getServiceReference(ICommService.class);
-    Assert.assertNotNull(svcref);
-
-    ICommService commService = context.getService(svcref);
-    Assert.assertNotNull(commService);
-
-    return commService;
-  }
-
-  private static ICommService commService;
-
-  @BeforeClass
-  public static void initCommService() {
-    commService = getCommService();
-  }
-
-  @Before
-  public void waitForBrowser() {
-    AtomicBoolean start = new AtomicBoolean(false);
-    commService.on("_ready", runnable -> {
-      start.set(true);
-    });
-    setResourceUrl("trigger_start.html");
-    Awaitility.await().untilTrue(start);
-  }
-
-  protected void setResourceUrl(String resourcePath) {
-    final Browser browser = (Browser) components.get(0);
-    final Display display = Display.getDefault();
-    display.syncExec(() -> {
-      browser.setUrl("file://" + RESOURCES_DIR + resourcePath);
-    });
-  }
+public class CommNormalFlow extends CommTestBase {
 
   @Test
   public void canTransferMessagesToAndFromJavaScript() {
@@ -77,64 +27,8 @@ public class CommNormalFlow extends BasicBrowserTest {
       Assert.assertNull(payload);
       commService.send("transfer");
     });
-    setResourceUrl("basic-test/no-payload.html");
-    Awaitility.await().timeout(Duration.ofSeconds(25)).untilTrue(success);
-  }
-
-  protected static class TestPayload {
-    private String id;
-    private int number;
-    private float fpNumber;
-    private double dNumber;
-
-    TestPayload(String id, int number, float fpNumber, double dNumber) {
-      this.id = id;
-      this.number = number;
-      this.fpNumber = fpNumber;
-      this.dNumber = dNumber;
-    }
-
-    public double getdNumber() {
-      return dNumber;
-    }
-
-    public void setdNumber(double dNumber) {
-      this.dNumber = dNumber;
-    }
-
-    public float getFpNumber() {
-      return fpNumber;
-    }
-
-    public void setFpNumber(float fpNumber) {
-      this.fpNumber = fpNumber;
-    }
-
-    public int getNumber() {
-      return number;
-    }
-
-    public void setNumber(int number) {
-      this.number = number;
-    }
-
-    public String getId() {
-      return id;
-    }
-
-    public void setId(String id) {
-      this.id = id;
-    }
-
-    @Override
-    public boolean equals(Object otp) {
-      if (!(otp instanceof TestPayload)) {
-        return false;
-      }
-      TestPayload tp = (TestPayload) otp;
-      return tp.id.equals(this.id) && tp.number == this.number && tp.fpNumber == this.fpNumber
-          && tp.dNumber == this.dNumber;
-    }
+    setFileResourceUrl("basic-test/no-payload.html");
+    Awaitility.await().timeout(Duration.ofSeconds(2)).untilTrue(success);
   }
 
   @Test
@@ -150,7 +44,7 @@ public class CommNormalFlow extends BasicBrowserTest {
       Assert.assertNull(payload);
       commService.send("transfer");
     });
-    setResourceUrl("basic-test/send-payload.html");
+    setFileResourceUrl("basic-test/send-payload.html");
     Awaitility.await().timeout(Duration.ofSeconds(2)).untilTrue(success);
   }
 
@@ -170,7 +64,7 @@ public class CommNormalFlow extends BasicBrowserTest {
       TestPayload somePayload = new TestPayload("success", 2, 3.5F, 5.0);
       commService.send("transfer", somePayload);
     });
-    setResourceUrl("basic-test/receive-payload.html");
+    setFileResourceUrl("basic-test/receive-payload.html");
     Awaitility.await().timeout(Duration.ofSeconds(2)).untilTrue(success);
   }
 
@@ -191,7 +85,7 @@ public class CommNormalFlow extends BasicBrowserTest {
         success.compareAndSet(false, true);
       });
     });
-    setResourceUrl("basic-test/send-response.html");
+    setFileResourceUrl("basic-test/send-response.html");
     Awaitility.await().timeout(Duration.ofSeconds(2)).untilTrue(success);
   }
 
@@ -211,7 +105,7 @@ public class CommNormalFlow extends BasicBrowserTest {
       TestPayload somePayload = new TestPayload("success", 2, 3.5F, 5.0);
       return somePayload;
     });
-    setResourceUrl("basic-test/receive-response.html");
+    setFileResourceUrl("basic-test/receive-response.html");
     Awaitility.await().timeout(Duration.ofSeconds(2)).untilTrue(success);
   }
 
@@ -230,7 +124,7 @@ public class CommNormalFlow extends BasicBrowserTest {
       Assert.assertNull(payload);
       throw new CommMessageException(5, "some message");
     });
-    setResourceUrl("error-test/receive-error.html");
+    setFileResourceUrl("error-test/receive-error.html");
     Awaitility.await().timeout(Duration.ofSeconds(2)).untilTrue(success);
   }
 
@@ -251,7 +145,7 @@ public class CommNormalFlow extends BasicBrowserTest {
         return null;
       });
     });
-    setResourceUrl("error-test/send-error.html");
+    setFileResourceUrl("error-test/send-error.html");
     Awaitility.await().timeout(Duration.ofSeconds(2)).untilTrue(success);
   }
 

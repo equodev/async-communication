@@ -15,7 +15,6 @@ import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
 import com.equo.chromium.swt.Browser;
-import com.equo.comm.api.ICommSendService;
 import com.equo.comm.api.ICommService;
 import com.equo.testing.common.osgi.base.BasicBrowserTest;
 
@@ -37,18 +36,7 @@ public class CommTestBase extends BasicBrowserTest {
     return commService;
   }
 
-  private static ICommSendService getCommSendService() {
-    ServiceReference<ICommSendService> svcref = context.getServiceReference(ICommSendService.class);
-    Assert.assertNotNull(svcref);
-
-    ICommSendService commSendService = context.getService(svcref);
-    Assert.assertNotNull(commSendService);
-
-    return commSendService;
-  }
-
   protected static ICommService commService;
-  protected static ICommSendService commSendService;
 
   protected void setFileResourceUrl(String resourcePath) {
     final Browser browser = (Browser) components.get(0);

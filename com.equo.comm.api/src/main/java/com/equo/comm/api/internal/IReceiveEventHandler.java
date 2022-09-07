@@ -22,14 +22,13 @@
 
 package com.equo.comm.api.internal;
 
-import java.util.concurrent.Future;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
- * Interface of the Comm service.
+ * Interface of the Comm receive service.
  */
-public interface IEventHandler {
+public interface IReceiveEventHandler {
   /**
    * Adds a Function event handler.
    * @param actionId      the action ID.
@@ -53,20 +52,5 @@ public interface IEventHandler {
    * @param actionId the action ID.
    */
   public void removeEventHandler(String actionId);
-
-  /**
-   * Sends the specified data to later be transmitted using the userEvent as ID.
-   * @param userEvent the event ID.
-   * @param payload   the data to send.
-   */
-  public void send(String userEvent, Object payload);
-
-  /**
-   * Sends the specified data to later be transmitted using the userEvent as ID.
-   * @param userEvent         the event ID.
-   * @param payload           the data to send.
-   * @param responseTypeClass the class with which the response will be received
-   */
-  public <T> Future<T> send(String userEvent, Object payload, Class<T> responseTypeClass);
 
 }

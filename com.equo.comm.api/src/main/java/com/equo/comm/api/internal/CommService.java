@@ -22,6 +22,9 @@
 
 package com.equo.comm.api.internal;
 
+import static org.osgi.service.component.annotations.ReferenceCardinality.OPTIONAL;
+import static org.osgi.service.component.annotations.ReferencePolicy.DYNAMIC;
+
 import java.util.concurrent.Future;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -32,56 +35,70 @@ import org.osgi.service.component.annotations.Reference;
 import com.equo.comm.api.ICommService;
 
 /**
- * Implements the handler actions for send and received web-socket events using
- * equoCommService instance.
+ * Implements the handler actions for send and receive events.
  */
 @Component(immediate = true)
 public class CommService implements ICommService {
 
-  @Reference
-  private IEventHandler equoEventHandler;
+  private static final ISendEventHandler NO_OP_SEND_HANDLER = new NoOpSendEventHandler();
 
+  @Reference
+  private IReceiveEventHandler receiveEventHandler;
+
+  private ISendEventHandler sendEventHandler = NO_OP_SEND_HANDLER;
+
+  @Override
   public void send(String userEvent) {
-    equoEventHandler.send(userEvent, null);
+    sendEventHandler.send(userEvent, null);
   }
 
+  @Override
   public void send(String userEvent, Object payload) {
-    equoEventHandler.send(userEvent, payload);
+    sendEventHandler.send(userEvent, payload);
   }
 
   @Override
   public <T> Future<T> send(String userEvent, Class<T> responseTypeClass) {
-    return equoEventHandler.send(userEvent, null, responseTypeClass);
+    return sendEventHandler.send(userEvent, null, responseTypeClass);
   }
 
   @Override
   public <T> Future<T> send(String userEvent, Object payload, Class<T> responseTypeClass) {
-    return equoEventHandler.send(userEvent, payload, responseTypeClass);
+    return sendEventHandler.send(userEvent, payload, responseTypeClass);
   }
 
   @Override
   public <T, R> void on(String actionId, Class<T> payloadClass, Function<T, R> actionHandler) {
-    equoEventHandler.addEventHandler(actionId, actionHandler, payloadClass);
+    receiveEventHandler.addEventHandler(actionId, actionHandler, payloadClass);
   }
 
   @Override
   public <R> void on(String actionId, Function<String, R> actionHandler) {
-    equoEventHandler.addEventHandler(actionId, actionHandler, String.class);
+    receiveEventHandler.addEventHandler(actionId, actionHandler, String.class);
   }
 
   @Override
   public <T> void on(String actionId, Class<T> payloadClass, Consumer<T> actionHandler) {
-    equoEventHandler.addEventHandler(actionId, actionHandler, payloadClass);
+    receiveEventHandler.addEventHandler(actionId, actionHandler, payloadClass);
   }
 
   @Override
   public void on(String actionId, Consumer<String> actionHandler) {
-    equoEventHandler.addEventHandler(actionId, actionHandler, String.class);
+    receiveEventHandler.addEventHandler(actionId, actionHandler, String.class);
   }
 
   @Override
   public void remove(String actionId) {
-    equoEventHandler.removeEventHandler(actionId);
+    receiveEventHandler.removeEventHandler(actionId);
+  }
+
+  @Reference(cardinality = OPTIONAL, policy = DYNAMIC)
+  public void bindSendEventHandler(ISendEventHandler sendEventHandler) {
+    this.sendEventHandler = sendEventHandler;
+  }
+
+  public void unbindSendEventHandler(ISendEventHandler sendEventHandler) {
+    this.sendEventHandler = NO_OP_SEND_HANDLER;
   }
 
 }

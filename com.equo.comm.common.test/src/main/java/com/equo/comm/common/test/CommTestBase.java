@@ -119,53 +119,53 @@ public class CommTestBase extends BasicBrowserTest {
 
   protected void testSimpleSend(String url, Object somePayload) {
     AtomicBoolean success = new AtomicBoolean(false);
-    getCommService().on("successTransferReceivePayload", (payload) -> {
+    commService.on("successTransferReceivePayload", (payload) -> {
       Assert.assertNull(payload);
       success.compareAndSet(false, true);
     });
-    getCommService().on("failTransferReceivePayload", (payload) -> {
+    commService.on("failTransferReceivePayload", (payload) -> {
       // Try to fail faster than the timeout
       fail("Fail JSON");
     });
-    getCommService().on("_startTransferReceivePayload", (payload) -> {
+    commService.on("_startTransferReceivePayload", (payload) -> {
       Assert.assertNull(payload);
-      getCommService().send("transfer", somePayload);
+      commService.send("transfer", somePayload);
     });
     setFileResourceUrl(url);
-    Awaitility.await().timeout(Duration.ofSeconds(2)).untilTrue(success);
+    Awaitility.await().timeout(Duration.ofSeconds(3)).untilTrue(success);
   }
 
   protected void testSimpleReceive(String url, Object expectedPayload) {
     AtomicBoolean success = new AtomicBoolean(false);
-    getCommService().on("transferPayload", (payload) -> {
+    commService.on("transferPayload", (payload) -> {
       Assert.assertNotNull(payload);
       Assert.assertEquals(expectedPayload, payload);
       success.compareAndSet(false, true);
     });
-    getCommService().on("_startTransferSendPayload", (payload) -> {
+    commService.on("_startTransferSendPayload", (payload) -> {
       Assert.assertNull(payload);
-      getCommService().send("transfer");
+      commService.send("transfer");
     });
     setFileResourceUrl(url);
-    Awaitility.await().timeout(Duration.ofSeconds(2)).untilTrue(success);
+    Awaitility.await().timeout(Duration.ofSeconds(3)).untilTrue(success);
   }
 
   protected void testSimpleResponse(String url, String somePayload) {
     AtomicBoolean success = new AtomicBoolean(false);
-    getCommService().on("successTransferReceiveResponse", (payload) -> {
+    commService.on("successTransferReceiveResponse", (payload) -> {
       Assert.assertNull(payload);
       success.compareAndSet(false, true);
     });
-    getCommService().on("failTransferReceiveResponse", (payload) -> {
+    commService.on("failTransferReceiveResponse", (payload) -> {
       // Try to fail faster than the timeout
       fail();
     });
-    getCommService().on("_startTransferReceiveResponse", (payload) -> {
+    commService.on("_startTransferReceiveResponse", (payload) -> {
       Assert.assertNull(payload);
       return somePayload;
     });
     setFileResourceUrl(url);
-    Awaitility.await().timeout(Duration.ofSeconds(1)).untilTrue(success);
+    Awaitility.await().timeout(Duration.ofSeconds(3)).untilTrue(success);
   }
 
 }

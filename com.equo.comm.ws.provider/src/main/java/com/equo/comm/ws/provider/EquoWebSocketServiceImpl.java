@@ -31,7 +31,8 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import com.equo.comm.api.internal.EventMessage;
-import com.equo.comm.api.internal.IEventHandler;
+import com.equo.comm.api.internal.IReceiveEventHandler;
+import com.equo.comm.api.internal.ISendEventHandler;
 import com.equo.logging.client.api.Logger;
 import com.equo.logging.client.api.LoggerFactory;
 
@@ -40,7 +41,7 @@ import com.equo.logging.client.api.LoggerFactory;
  * all the event listeners.
  */
 @Component
-public class EquoWebSocketServiceImpl implements IEventHandler {
+public class EquoWebSocketServiceImpl implements IReceiveEventHandler, ISendEventHandler {
 
   protected static final Logger LOGGER = LoggerFactory.getLogger(EquoWebSocketServiceImpl.class);
 

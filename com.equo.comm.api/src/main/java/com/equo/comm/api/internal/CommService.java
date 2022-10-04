@@ -40,7 +40,7 @@ import com.equo.comm.api.ICommService;
 @Component(immediate = true)
 public class CommService implements ICommService {
 
-  private static final ISendEventHandler NO_OP_SEND_HANDLER = new NoOpSendEventHandler();
+  private static final NoOpSendEventHandler NO_OP_SEND_HANDLER = new NoOpSendEventHandler();
 
   @Reference
   private IReceiveEventHandler receiveEventHandler;
@@ -95,6 +95,7 @@ public class CommService implements ICommService {
   @Reference(cardinality = OPTIONAL, policy = DYNAMIC)
   public void bindSendEventHandler(ISendEventHandler sendEventHandler) {
     this.sendEventHandler = sendEventHandler;
+    NO_OP_SEND_HANDLER.flush(sendEventHandler);
   }
 
   public void unbindSendEventHandler(ISendEventHandler sendEventHandler) {

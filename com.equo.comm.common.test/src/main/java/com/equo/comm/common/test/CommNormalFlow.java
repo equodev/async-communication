@@ -28,7 +28,7 @@ public class CommNormalFlow extends CommTestBase {
       commService.send("transfer");
     });
     setFileResourceUrl("basic-test/no-payload.html");
-    Awaitility.await().timeout(Duration.ofSeconds(2)).untilTrue(success);
+    Awaitility.await().timeout(Duration.ofSeconds(3)).untilTrue(success);
   }
 
   @Test
@@ -45,7 +45,7 @@ public class CommNormalFlow extends CommTestBase {
       commService.send("transfer");
     });
     setFileResourceUrl("basic-test/send-payload.html");
-    Awaitility.await().timeout(Duration.ofSeconds(2)).untilTrue(success);
+    Awaitility.await().timeout(Duration.ofSeconds(3)).untilTrue(success);
   }
 
   @Test
@@ -65,7 +65,7 @@ public class CommNormalFlow extends CommTestBase {
       commService.send("transfer", somePayload);
     });
     setFileResourceUrl("basic-test/receive-payload.html");
-    Awaitility.await().timeout(Duration.ofSeconds(2)).untilTrue(success);
+    Awaitility.await().timeout(Duration.ofSeconds(3)).untilTrue(success);
   }
 
   @Test
@@ -86,7 +86,7 @@ public class CommNormalFlow extends CommTestBase {
       });
     });
     setFileResourceUrl("basic-test/send-response.html");
-    Awaitility.await().timeout(Duration.ofSeconds(2)).untilTrue(success);
+    Awaitility.await().timeout(Duration.ofSeconds(3)).untilTrue(success);
   }
 
   @Test
@@ -106,7 +106,7 @@ public class CommNormalFlow extends CommTestBase {
       return somePayload;
     });
     setFileResourceUrl("basic-test/receive-response.html");
-    Awaitility.await().timeout(Duration.ofSeconds(2)).untilTrue(success);
+    Awaitility.await().timeout(Duration.ofSeconds(3)).untilTrue(success);
   }
 
   @Test
@@ -125,7 +125,7 @@ public class CommNormalFlow extends CommTestBase {
       throw new CommMessageException(5, "some message");
     });
     setFileResourceUrl("error-test/receive-error.html");
-    Awaitility.await().timeout(Duration.ofSeconds(2)).untilTrue(success);
+    Awaitility.await().timeout(Duration.ofSeconds(3)).untilTrue(success);
   }
 
   @Test
@@ -146,7 +146,7 @@ public class CommNormalFlow extends CommTestBase {
       });
     });
     setFileResourceUrl("error-test/send-error.html");
-    Awaitility.await().timeout(Duration.ofSeconds(2)).untilTrue(success);
+    Awaitility.await().timeout(Duration.ofSeconds(3)).untilTrue(success);
   }
 
 }

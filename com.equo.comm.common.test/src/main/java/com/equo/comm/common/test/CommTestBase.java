@@ -1,13 +1,15 @@
 package com.equo.comm.common.test;
 
+import static org.awaitility.Awaitility.await;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
 import java.time.Duration;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.awaitility.Awaitility;
 import org.eclipse.swt.widgets.Display;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.osgi.framework.BundleContext;
@@ -28,10 +30,10 @@ public class CommTestBase extends BasicBrowserTest {
 
   private static ICommService getCommService() {
     ServiceReference<ICommService> svcref = context.getServiceReference(ICommService.class);
-    Assert.assertNotNull(svcref);
+    assertNotNull(svcref);
 
     ICommService commService = context.getService(svcref);
-    Assert.assertNotNull(commService);
+    assertNotNull(commService);
 
     return commService;
   }
@@ -58,7 +60,7 @@ public class CommTestBase extends BasicBrowserTest {
       start.set(true);
     });
     setFileResourceUrl("trigger_start.html");
-    Awaitility.await().untilTrue(start);
+    await().untilTrue(start);
   }
 
   protected static class TestPayload {
@@ -120,7 +122,7 @@ public class CommTestBase extends BasicBrowserTest {
   protected void testSimpleSend(String url, Object somePayload) {
     AtomicBoolean success = new AtomicBoolean(false);
     commService.on("successTransferReceivePayload", (payload) -> {
-      Assert.assertNull(payload);
+      assertNull(payload);
       success.compareAndSet(false, true);
     });
     commService.on("failTransferReceivePayload", (payload) -> {
@@ -128,32 +130,32 @@ public class CommTestBase extends BasicBrowserTest {
       fail("Fail JSON");
     });
     commService.on("_startTransferReceivePayload", (payload) -> {
-      Assert.assertNull(payload);
+      assertNull(payload);
       commService.send("transfer", somePayload);
     });
     setFileResourceUrl(url);
-    Awaitility.await().timeout(Duration.ofSeconds(3)).untilTrue(success);
+    await().timeout(Duration.ofSeconds(3)).untilTrue(success);
   }
 
   protected void testSimpleReceive(String url, Object expectedPayload) {
     AtomicBoolean success = new AtomicBoolean(false);
     commService.on("transferPayload", (payload) -> {
-      Assert.assertNotNull(payload);
-      Assert.assertEquals(expectedPayload, payload);
+      assertNotNull(payload);
+      assertEquals(expectedPayload, payload);
       success.compareAndSet(false, true);
     });
     commService.on("_startTransferSendPayload", (payload) -> {
-      Assert.assertNull(payload);
+      assertNull(payload);
       commService.send("transfer");
     });
     setFileResourceUrl(url);
-    Awaitility.await().timeout(Duration.ofSeconds(3)).untilTrue(success);
+    await().timeout(Duration.ofSeconds(3)).untilTrue(success);
   }
 
   protected void testSimpleResponse(String url, String somePayload) {
     AtomicBoolean success = new AtomicBoolean(false);
     commService.on("successTransferReceiveResponse", (payload) -> {
-      Assert.assertNull(payload);
+      assertNull(payload);
       success.compareAndSet(false, true);
     });
     commService.on("failTransferReceiveResponse", (payload) -> {
@@ -161,11 +163,11 @@ public class CommTestBase extends BasicBrowserTest {
       fail();
     });
     commService.on("_startTransferReceiveResponse", (payload) -> {
-      Assert.assertNull(payload);
+      assertNull(payload);
       return somePayload;
     });
     setFileResourceUrl(url);
-    Awaitility.await().timeout(Duration.ofSeconds(3)).untilTrue(success);
+    await().timeout(Duration.ofSeconds(3)).untilTrue(success);
   }
 
 }

@@ -45,7 +45,7 @@ public class CommService implements ICommService {
   @Reference
   private IReceiveEventHandler receiveEventHandler;
 
-  private ISendEventHandler sendEventHandler = NO_OP_SEND_HANDLER;
+  private volatile ISendEventHandler sendEventHandler = NO_OP_SEND_HANDLER;
 
   @Override
   public void send(String userEvent) {

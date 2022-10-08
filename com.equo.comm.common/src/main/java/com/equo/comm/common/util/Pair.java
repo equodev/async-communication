@@ -1,4 +1,4 @@
-package com.equo.comm.api.internal.util;
+package com.equo.comm.common.util;
 
 /**
  * Generic pair.

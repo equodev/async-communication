@@ -7,7 +7,7 @@ import org.junit.Assert;
 import org.osgi.framework.ServiceReference;
 
 import com.equo.chromium.swt.Browser;
-import com.equo.comm.api.internal.IReceiveEventHandler;
+import com.equo.comm.common.handler.IReceiveEventHandler;
 import com.equo.comm.common.test.CommNormalFlow;
 
 public class CommWebsocketFlowTest extends CommNormalFlow {
@@ -16,7 +16,8 @@ public class CommWebsocketFlowTest extends CommNormalFlow {
 
   protected int getWebsocketPort() {
     if (port == null) {
-      ServiceReference<IReceiveEventHandler> svcref = context.getServiceReference(IReceiveEventHandler.class);
+      ServiceReference<IReceiveEventHandler> svcref =
+          context.getServiceReference(IReceiveEventHandler.class);
       Assert.assertNotNull(svcref);
 
       IReceiveEventHandler commService = context.getService(svcref);

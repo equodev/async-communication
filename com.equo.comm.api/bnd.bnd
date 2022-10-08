@@ -11,7 +11,7 @@ Export-Package: \
 	com.equo.comm.api.annotations,\
 	com.equo.comm.api.error,\
 	com.equo.comm.api.internal,\
-	com.equo.comm.api.internal.util
+	com.equo.comm.common.util
 
 Import-Package: \
 	java.*;resolution:=optional,\

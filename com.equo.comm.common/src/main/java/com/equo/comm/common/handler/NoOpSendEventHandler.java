@@ -1,11 +1,11 @@
-package com.equo.comm.api.internal;
+package com.equo.comm.common.handler;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 
-import com.equo.comm.api.internal.util.Pair;
+import com.equo.comm.common.util.Pair;
 
 /**
  * NoOp implementation for send events.

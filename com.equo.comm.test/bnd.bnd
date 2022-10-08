@@ -10,10 +10,11 @@ Test-Cases: ${classes;CONCRETE;PUBLIC;NAMED;*Test}
 	osgi.compatibility.bootdelegation=true
 
 -buildpath: \
+    com.equo.comm.api;version=latest,\
+    com.equo.comm.common;version=latest,\
 	com.equo.comm.common.test;version=latest,\
 	com.equo.testing.common.osgi.core;version=latest,\
 	com.equo.chromium;version=latest,\
-	com.equo.comm.api;version=latest,\
 	com.equo.comm.ws.provider;version=latest,\
 	org.eclipse.swt,\
 	org.eclipse.swt.gtk.linux.x86_64,\

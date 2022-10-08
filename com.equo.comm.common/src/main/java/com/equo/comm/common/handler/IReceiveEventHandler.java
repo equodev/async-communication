@@ -20,7 +20,7 @@
 **
 ****************************************************************************/
 
-package com.equo.comm.api.internal;
+package com.equo.comm.common.handler;
 
 import java.util.function.Consumer;
 import java.util.function.Function;

@@ -24,6 +24,9 @@ import com.equo.comm.common.util.ActionHelper;
 import com.equo.comm.common.util.Pair;
 import com.google.gson.Gson;
 
+/**
+ * Service intended to be used by providers to handle common message processing.
+ */
 @Component(service = MessageHandler.class)
 public class MessageHandler {
 
@@ -32,6 +35,11 @@ public class MessageHandler {
   @Reference
   private HandlerContainer handlerContainer;
 
+  /**
+   * Parses the given message into an {@EventMessage}.
+   * @param  message to parse
+   * @return         eventMessage
+   */
   public EventMessage parseEventMessage(String message) {
     EventMessage eventMessage = null;
     try {
@@ -42,6 +50,12 @@ public class MessageHandler {
     return eventMessage;
   }
 
+  /**
+   * Takes an event message and processes it accordingly. Returns the wrapped
+   * response or an empty Optional.
+   * @param  eventMessage to process
+   * @return              the handler response
+   */
   @SuppressWarnings("unchecked")
   public Optional<Object> processReceivedEventMessage(EventMessage eventMessage) {
     String actionId = eventMessage.getActionId();
@@ -101,6 +115,12 @@ public class MessageHandler {
     return Optional.empty();
   }
 
+  /**
+   * Takes an event message and converts it to JSON format, handling special cases
+   * if applies.
+   * @param  eventMessage to process
+   * @return              JSON processed from the eventMessage
+   */
   public String processMessageToSend(EventMessage eventMessage) {
     Object payload = eventMessage.getPayload();
     if (payload != null) {

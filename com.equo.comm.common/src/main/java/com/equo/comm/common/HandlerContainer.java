@@ -11,7 +11,7 @@ import org.osgi.service.component.annotations.Component;
 import com.equo.comm.common.util.Pair;
 
 /**
- * Contains the response action handlers.
+ * Contains the action handlers.
  */
 @Component(service = HandlerContainer.class)
 public class HandlerContainer {
@@ -67,6 +67,10 @@ public class HandlerContainer {
     return actionParamTypes.get(key);
   }
 
+  /**
+   * Removes the actionId from all containers.
+   * @param actionId to remove
+   */
   public void removeEventHandler(String actionId) {
     removeFunction(actionId);
     removeConsumer(actionId);

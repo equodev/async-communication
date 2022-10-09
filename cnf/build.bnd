@@ -29,7 +29,7 @@ Bundle-License: ${def;license;${equo.license}}
     aQute.bnd.repository.p2.provider.P2Repository; \
     url = https://dl.equoplatform.com/chromium-swt-ee/equo/p2/cef/80.0.16/repository; \
     name = "Chromium CEF"; \
- 	location = ~/.bnd/cache/chromium-cef
+    location = ~/.bnd/cache/chromium-cef
 
 -plugin.sdkcore: \
     aQute.bnd.repository.osgi.OSGiRepository; \

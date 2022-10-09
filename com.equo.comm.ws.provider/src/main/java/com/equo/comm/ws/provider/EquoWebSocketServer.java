@@ -173,7 +173,6 @@ public class EquoWebSocketServer extends WebSocketServer {
    * @param message to receive from a handler.
    */
   public void receiveMessage(String message, boolean broadcast) {
-    System.out.println(message);
     EventMessage eventMessage = messageHandler.parseEventMessage(message);
     if (eventMessage != null) {
       try {

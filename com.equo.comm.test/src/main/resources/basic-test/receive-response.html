@@ -12,7 +12,6 @@
     <script src="../equo-comm.js"></script>
     <script>
         EquoCommService.send("_startTransferReceiveResponse").then((payload) => {
-            console.log(payload)
             if (payload.id === "success" &&
                 payload.number == 2 &&
                 payload.fpNumber == 3.5 &&

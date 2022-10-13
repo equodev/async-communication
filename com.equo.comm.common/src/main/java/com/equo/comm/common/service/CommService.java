@@ -20,7 +20,7 @@
 **
 ****************************************************************************/
 
-package com.equo.comm.api.internal;
+package com.equo.comm.common.service;
 
 import static org.osgi.service.component.annotations.ReferenceCardinality.OPTIONAL;
 import static org.osgi.service.component.annotations.ReferencePolicy.DYNAMIC;
@@ -33,6 +33,9 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import com.equo.comm.api.ICommService;
+import com.equo.comm.common.handler.IReceiveEventHandler;
+import com.equo.comm.common.handler.ISendEventHandler;
+import com.equo.comm.common.handler.NoOpSendEventHandler;
 
 /**
  * Implements the handler actions for send and receive events.

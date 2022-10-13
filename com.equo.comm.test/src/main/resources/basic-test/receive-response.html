@@ -13,7 +13,7 @@
     <script>
         EquoCommService.send("_startTransferReceiveResponse").then((payload) => {
             if (payload.id === "success" &&
-                payload.number == 2.0 &&
+                payload.number == 2 &&
                 payload.fpNumber == 3.5 &&
                 payload.dNumber == 5.0) {
                 EquoCommService.send("successTransferReceiveResponse");

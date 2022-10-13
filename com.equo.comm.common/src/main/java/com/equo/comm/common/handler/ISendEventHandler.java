@@ -1,4 +1,4 @@
-package com.equo.comm.api.internal;
+package com.equo.comm.common.handler;
 
 import java.util.concurrent.Future;
 

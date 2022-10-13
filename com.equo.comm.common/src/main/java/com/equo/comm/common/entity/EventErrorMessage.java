@@ -1,4 +1,4 @@
-package com.equo.comm.ws.provider.entity;
+package com.equo.comm.common.entity;
 
 /**
  * Model to use for error message serialization.

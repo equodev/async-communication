@@ -1,4 +1,4 @@
-package com.equo.comm.api.internal;
+package com.equo.comm.common.service;
 
 import java.util.concurrent.Future;
 
@@ -6,6 +6,7 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 import com.equo.comm.api.ICommSendService;
+import com.equo.comm.common.handler.ISendEventHandler;
 
 /**
  * Implements the handler actions for send events.

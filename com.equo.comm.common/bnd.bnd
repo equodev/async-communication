@@ -1,0 +1,12 @@
+Bundle-Version: 1.0.0.${tstamp}
+Export-Package: \
+    com.equo.comm.common,\
+    com.equo.comm.common.entity,\
+    com.equo.comm.common.handler,\
+    com.equo.comm.common.service,\
+    com.equo.comm.common.util
+
+-buildpath: \
+    osgi.cmpn,\
+    com.equo.comm.api;version=latest,\
+    com.google.gson

@@ -20,7 +20,7 @@
 **
 ****************************************************************************/
 
-package com.equo.comm.api.internal;
+package com.equo.comm.common.entity;
 
 /**
  * An action message with parameters.

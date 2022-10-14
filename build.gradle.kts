@@ -1,15 +1,11 @@
 plugins {
-    checkstyle
+  checkstyle
 }
 
 allprojects {
-    repositories { mavenCentral() }
+  apply(plugin = "checkstyle")
 
-    apply(plugin = "checkstyle")
-
-    checkstyle {
-      toolVersion = "8.43"
-    }
-
+  checkstyle {
+    toolVersion = "8.43"
+  }
 }
-

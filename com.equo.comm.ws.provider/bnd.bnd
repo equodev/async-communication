@@ -26,4 +26,5 @@ Import-Package: \
 
 Export-Package: \
     com.equo.comm.common.handler,\
+    com.equo.comm.common.entity,\
     com.equo.comm.ws.provider

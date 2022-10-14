@@ -109,7 +109,7 @@ public class CommNormalFlow extends CommTestBase {
       return somePayload;
     });
     setFileResourceUrl("basic-test/receive-response.html");
-    await().timeout(Duration.ofSeconds(99999)).untilTrue(success);
+    await().timeout(Duration.ofSeconds(3)).untilTrue(success);
   }
 
   @Test
@@ -149,7 +149,7 @@ public class CommNormalFlow extends CommTestBase {
       });
     });
     setFileResourceUrl("error-test/send-error.html");
-    await().timeout(Duration.ofSeconds(9999)).untilTrue(success);
+    await().timeout(Duration.ofSeconds(3)).untilTrue(success);
   }
 
   @Test
@@ -169,7 +169,7 @@ public class CommNormalFlow extends CommTestBase {
       });
     });
     setFileResourceUrl("error-test/receive-payload-non-existent-user-event.html");
-    await().timeout(Duration.ofSeconds(9999)).untilTrue(success);
+    await().timeout(Duration.ofSeconds(3)).untilTrue(success);
   }
 
   @Test
@@ -181,7 +181,7 @@ public class CommNormalFlow extends CommTestBase {
       success.compareAndSet(false, true);
     });
     setFileResourceUrl("error-test/send-payload-non-existent-user-event.html");
-    await().timeout(Duration.ofSeconds(9999)).untilTrue(success);
+    await().timeout(Duration.ofSeconds(3)).untilTrue(success);
   }
 
 }

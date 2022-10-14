@@ -17,8 +17,7 @@ Private-Package: \
     Java-WebSocket
 
 Private-Package: \
-    com.equo.comm.common.*,\
-    com.equo.comm.ws.provider
+    com.equo.comm.common.*
 
 Import-Package: \
     com.equo.logging.client.api.*,\
@@ -26,4 +25,5 @@ Import-Package: \
     *;resolution:=optional
 
 Export-Package: \
-    com.equo.comm.common.handler
+    com.equo.comm.common.handler,\
+    com.equo.comm.ws.provider

@@ -1,5 +1,6 @@
 package com.equo.comm.common.test;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -108,7 +109,7 @@ public class CommNormalFlow extends CommTestBase {
       return somePayload;
     });
     setFileResourceUrl("basic-test/receive-response.html");
-    await().timeout(Duration.ofSeconds(99999)).untilTrue(success);
+    await().timeout(Duration.ofSeconds(3)).untilTrue(success);
   }
 
   @Test
@@ -148,6 +149,38 @@ public class CommNormalFlow extends CommTestBase {
       });
     });
     setFileResourceUrl("error-test/send-error.html");
+    await().timeout(Duration.ofSeconds(3)).untilTrue(success);
+  }
+
+  @Test
+  public void shouldCompleteFutureExceptionallyWhenThereIsNoJavascriptHandler() {
+    AtomicBoolean success = new AtomicBoolean(false);
+    commService.on("_startTransferReceivePayload", (payload) -> {
+      assertThat(payload).isNull();
+      CompletableFuture<String> future =
+          (CompletableFuture<String>) commService.send("transfer", null, String.class);
+      future.exceptionally(throwable -> {
+        assertThat(throwable.getMessage())
+            .isEqualTo("An event handler does not exist for the user event 'transfer'");
+        assertThat(throwable.getClass()).isEqualTo(CommMessageException.class);
+        assertThat(((CommMessageException) throwable).getErrorCode()).isEqualTo(255);
+        success.compareAndSet(false, true);
+        return null;
+      });
+    });
+    setFileResourceUrl("error-test/receive-payload-non-existent-user-event.html");
+    await().timeout(Duration.ofSeconds(3)).untilTrue(success);
+  }
+
+  @Test
+  public void shouldRejectPromiseWhenThereIsNoJavaHandler() {
+    AtomicBoolean success = new AtomicBoolean(false);
+    commService.on("completeTest", error -> {
+      assertThat(error).isEqualTo(
+          "{\"code\":255.0,\"message\":\"An event handler does not exist for the user event \\u0027eventShouldNotExist\\u0027\"}");
+      success.compareAndSet(false, true);
+    });
+    setFileResourceUrl("error-test/send-payload-non-existent-user-event.html");
     await().timeout(Duration.ofSeconds(3)).untilTrue(success);
   }
 

@@ -23,6 +23,12 @@ import com.equo.comm.common.entity.EventMessage;
 import com.equo.comm.common.util.ActionHelper;
 import com.equo.comm.common.util.Pair;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 
 /**
  * Service intended to be used by providers to handle common message processing.
@@ -30,7 +36,26 @@ import com.google.gson.Gson;
 @Component(service = MessageHandler.class)
 public class MessageHandler {
 
-  private static Gson GSON_PARSER = new Gson();
+  private static final String MESSAGE_HANDLER_DOES_NOT_EXIST_ERROR =
+      "An event handler does not exist for the user event ";
+
+  private static Gson GSON_PARSER;
+
+  static {
+    GsonBuilder gsonBuilder = new GsonBuilder();
+    JsonDeserializer<CommMessageException> deserializer =
+        new JsonDeserializer<CommMessageException>() {
+          @Override
+          public CommMessageException deserialize(JsonElement json, Type typeOfT,
+              JsonDeserializationContext context) throws JsonParseException {
+            JsonObject jsonObject = json.getAsJsonObject();
+            return new CommMessageException(jsonObject.get("code").getAsNumber().intValue(),
+                jsonObject.get("message").getAsString());
+          }
+        };
+    gsonBuilder.registerTypeAdapter(CommMessageException.class, deserializer);
+    GSON_PARSER = gsonBuilder.create();
+  }
 
   @Reference
   private HandlerContainer handlerContainer;
@@ -72,7 +97,9 @@ public class MessageHandler {
       CompletableFuture<Object> future = (CompletableFuture<Object>) pair.getFirst();
       String messageError = eventMessage.getError();
       if (messageError != null) {
-        future.completeExceptionally(new CommMessageException(-1, messageError));
+        CommMessageException messageException =
+            GSON_PARSER.fromJson(jsonString, CommMessageException.class);
+        future.completeExceptionally(messageException);
       } else {
         Object parsedPayload = null;
         if (String.class.equals(pair.getSecond())) {
@@ -82,6 +109,7 @@ public class MessageHandler {
         }
         future.complete(parsedPayload);
       }
+      return Optional.empty();
     }
 
     if (handlerContainer.getFunction(actionId) != null
@@ -112,7 +140,9 @@ public class MessageHandler {
         return Optional.empty();
       }
     }
-    return Optional.empty();
+
+    throw new CommMessageException(255,
+        MESSAGE_HANDLER_DOES_NOT_EXIST_ERROR + "'" + actionId + "'");
   }
 
   /**

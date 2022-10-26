@@ -5,6 +5,7 @@ Export-Package: com.equo.comm.common.test
     src/main/resources
 
 -buildpath: \
+    osgi.cmpn,\
     osgi.enroute.junit.wrapper;version="[4.12,5.0)",\
     assertj-core;version="[3.15.0,4.0.0)",\
     org.hamcrest;version="[2.2.0,2.3.0)",\

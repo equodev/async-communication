@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script src="../../../../../com.equo.comm.ws.provider/src/main/resources/equo-comm.js"></script>
+    <script>
+        EquoCommService.on("transfer", () => {
+            EquoCommService.send("testHandler", "test").then(response => {
+                if (response === "test1") {
+                    EquoCommService.send("successTransferComponentActionHandler")
+                }
+            })
+        });
+        EquoCommService.send("_startTransferComponentActionHandler");
+    </script>
+</body>
+
+</html>

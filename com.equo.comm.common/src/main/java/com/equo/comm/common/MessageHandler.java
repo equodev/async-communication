@@ -9,6 +9,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
@@ -57,8 +58,12 @@ public class MessageHandler {
     GSON_PARSER = gsonBuilder.create();
   }
 
-  @Reference
   private HandlerContainer handlerContainer;
+
+  @Activate
+  public MessageHandler(@Reference HandlerContainer handlerContainer) {
+    this.handlerContainer = handlerContainer;
+  }
 
   /**
    * Parses the given message into an {@EventMessage}.

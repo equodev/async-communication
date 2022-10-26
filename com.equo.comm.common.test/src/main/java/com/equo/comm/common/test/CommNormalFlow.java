@@ -184,4 +184,19 @@ public class CommNormalFlow extends CommTestBase {
     await().timeout(Duration.ofSeconds(3)).untilTrue(success);
   }
 
+  @Test
+  public void canDeclareHandlersAsOsgiComponents() {
+    AtomicBoolean success = new AtomicBoolean(false);
+    commService.on("successTransferComponentActionHandler", (payload) -> {
+      assertNull(payload);
+      success.compareAndSet(false, true);
+    });
+    commService.on("_startTransferComponentActionHandler", (payload) -> {
+      assertNull(payload);
+      commService.send("transfer");
+    });
+    setFileResourceUrl("basic-test/send-payload-component-action-handler.html");
+    await().timeout(Duration.ofSeconds(3)).untilTrue(success);
+  }
+
 }

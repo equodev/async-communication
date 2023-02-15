@@ -9,14 +9,12 @@ import static org.junit.Assert.fail;
 import java.time.Duration;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.eclipse.swt.widgets.Display;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 
-import com.equo.chromium.swt.Browser;
 import com.equo.comm.api.ICommService;
 import com.equo.testing.common.osgi.base.BasicBrowserTest;
 
@@ -41,10 +39,8 @@ public class CommTestBase extends BasicBrowserTest {
   protected static ICommService commService;
 
   protected void setFileResourceUrl(String resourcePath) {
-    final Browser browser = (Browser) components.get(0);
-    final Display display = Display.getDefault();
-    display.syncExec(() -> {
-      browser.setUrl("file://" + RESOURCES_DIR + resourcePath);
+    uiDispatch.syncExec(() -> {
+      currentBrowser.setUrl("file://" + RESOURCES_DIR + resourcePath);
     });
   }
 

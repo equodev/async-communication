@@ -6,6 +6,7 @@ Export-Package: com.equo.comm.common.test
 
 -buildpath: \
     osgi.cmpn,\
+    osgi.core,\
     osgi.enroute.junit.wrapper;version="[4.12,5.0)",\
     assertj-core;version="[3.15.0,4.0.0)",\
     org.hamcrest;version="[2.2.0,2.3.0)",\
@@ -14,5 +15,4 @@ Export-Package: com.equo.comm.common.test
     com.equo.chromium;version=latest,\
     com.equo.testing.common.osgi.core;version=latest,\
     com.equo.comm.api;version=latest,\
-    org.osgi.framework,\
     org.awaitility

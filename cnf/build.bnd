@@ -19,17 +19,12 @@ Bundle-License: ${def;license;${equo.license}}
         poll.time = -1; \
         cache = ~/.bnd/cache/eclipse201912
 
--plugin.chromiumswt: \
-    aQute.bnd.repository.p2.provider.P2Repository; \
-    url = https://dl.equoplatform.com/chromium-swt-ee/equo/p2/swt/80.0.21/repository; \
-    name = "Chromium SWT"; \
-    location = ~/.bnd/cache/chromium-swt
-
--plugin.chromiumcef: \
-    aQute.bnd.repository.p2.provider.P2Repository; \
-    url = https://dl.equoplatform.com/chromium-swt-ee/equo/p2/cef/80.0.16/repository; \
-    name = "Chromium CEF"; \
-    location = ~/.bnd/cache/chromium-cef
+-plugin.chromium: \
+    aQute.bnd.repository.osgi.OSGiRepository; \
+        name = "Chromium SWT+CEF"; \
+        locations = "https://dl.equo.dev/chromium-swt-ee/equo/mvn/index.xml.gz"; \
+        poll.time = -1; \
+        cache = ~/.bnd/cache/equo-chromium-swt
 
 -plugin.sdkcore: \
     aQute.bnd.repository.osgi.OSGiRepository; \
@@ -44,6 +39,13 @@ Bundle-License: ${def;license;${equo.license}}
         local = ${build}/release; \
         type = R5
 
+-plugin.testing-commons: \
+    aQute.bnd.repository.osgi.OSGiRepository; \
+        name = "Testing Commons"; \
+        locations = "https://dl.equoplatform.com/testing-commons/develop/repo/index.xml.gz"; \
+        poll.time = -1; \
+        cache = ~/.bnd/cache/testing-commons
+        
 -plugin.testing-commons: \
     aQute.bnd.repository.osgi.OSGiRepository; \
         name = "Testing Commons"; \

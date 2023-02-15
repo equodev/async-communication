@@ -22,6 +22,8 @@ Private-Package: \
 Import-Package: \
     com.equo.logging.client.api.*,\
     org.java_websocket.*,\
+    com.google.gson.*,\
+    com.equo.comm.api.*,\
     *;resolution:=optional
 
 Export-Package: \

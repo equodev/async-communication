@@ -2,11 +2,9 @@ package com.equo.comm.test;
 
 import java.lang.reflect.Method;
 
-import org.eclipse.swt.widgets.Display;
 import org.junit.Assert;
 import org.osgi.framework.ServiceReference;
 
-import com.equo.chromium.swt.Browser;
 import com.equo.comm.common.handler.IReceiveEventHandler;
 import com.equo.comm.common.test.CommNormalFlow;
 
@@ -37,10 +35,8 @@ public class CommWebsocketFlowTest extends CommNormalFlow {
 
   @Override
   protected void setFileResourceUrl(String resourcePath) {
-    final Browser browser = (Browser) components.get(0);
-    final Display display = Display.getDefault();
-    display.syncExec(() -> {
-      browser
+    uiDispatch.syncExec(() -> {
+      currentBrowser
           .setUrl("file://" + RESOURCES_DIR + resourcePath + "?equocommport=" + getWebsocketPort());
     });
   }

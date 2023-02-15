@@ -3,7 +3,7 @@ Bundle-ActivationPolicy: lazy
 
 -buildpath: \
     osgi.cmpn,\
-    org.osgi.framework
+    osgi.core
 
 Export-Package: \
     com.equo.comm.api,\

@@ -5,12 +5,13 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 
+import com.equo.comm.api.ICommSendService;
 import com.equo.comm.common.util.Pair;
 
 /**
  * NoOp implementation for send events.
  */
-public class NoOpSendEventHandler implements ISendEventHandler {
+public class NoOpSendEventHandler implements ICommSendService {
 
   private List<Pair<Pair<String, Object>, Pair<CompletableFuture<?>, Class<?>>>> sendEvents =
       new ArrayList<>();
@@ -20,7 +21,7 @@ public class NoOpSendEventHandler implements ISendEventHandler {
    * Sends all pending events through the specified send event handler.
    */
   @SuppressWarnings("unchecked")
-  public void flush(ISendEventHandler eventHandler) {
+  public void flush(ICommSendService service) {
     for (Pair<Pair<String, Object>, Pair<CompletableFuture<?>, Class<?>>> sendEvent : sendEvents) {
       Pair<String, Object> userEvent = sendEvent.getFirst();
       String userEventId = userEvent.getFirst();
@@ -31,7 +32,7 @@ public class NoOpSendEventHandler implements ISendEventHandler {
         Class<?> responseTypeClass = response.getSecond();
         pendingFutures.add(future);
         final CompletableFuture<Object> actualFuture =
-            (CompletableFuture<Object>) eventHandler.send(userEventId, payload, responseTypeClass);
+            (CompletableFuture<Object>) service.send(userEventId, payload, responseTypeClass);
         actualFuture.thenAccept((actualResponse) -> {
           future.complete(actualResponse);
           pendingFutures.remove(future);
@@ -42,7 +43,7 @@ public class NoOpSendEventHandler implements ISendEventHandler {
           return null;
         });
       } else {
-        eventHandler.send(userEventId, payload);
+        service.send(userEventId, payload);
       }
     }
     sendEvents.clear();
@@ -62,6 +63,16 @@ public class NoOpSendEventHandler implements ISendEventHandler {
         new Pair<>(new Pair<>(userEvent, payload), new Pair<>(future, responseTypeClass));
     sendEvents.add(sendEvent);
     return future;
+  }
+
+  @Override
+  public void send(String userEvent) {
+    send(userEvent, (Object) null);
+  }
+
+  @Override
+  public <T> Future<T> send(String userEvent, Class<T> responseTypeClass) {
+    return send(userEvent, null, responseTypeClass);
   }
 
 }

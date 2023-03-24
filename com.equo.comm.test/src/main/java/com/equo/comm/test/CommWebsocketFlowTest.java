@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 import org.junit.Assert;
 import org.osgi.framework.ServiceReference;
 
-import com.equo.comm.common.handler.IReceiveEventHandler;
+import com.equo.comm.api.ICommService;
 import com.equo.comm.common.test.CommNormalFlow;
 
 public class CommWebsocketFlowTest extends CommNormalFlow {
@@ -14,11 +14,10 @@ public class CommWebsocketFlowTest extends CommNormalFlow {
 
   protected int getWebsocketPort() {
     if (port == null) {
-      ServiceReference<IReceiveEventHandler> svcref =
-          context.getServiceReference(IReceiveEventHandler.class);
+      ServiceReference<ICommService> svcref = context.getServiceReference(ICommService.class);
       Assert.assertNotNull(svcref);
 
-      IReceiveEventHandler commService = context.getService(svcref);
+      ICommService commService = context.getService(svcref);
       Assert.assertNotNull(commService);
 
       Class<?> serviceClass = commService.getClass();

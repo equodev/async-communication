@@ -3,6 +3,8 @@ Private-Package: \
     com.equo.comm.ws.provider.entity
 
 -includeresource: \
+    META-INF/services/=com.equo.comm.api.ICommSendService,\
+    META-INF/services/=com.equo.comm.api.ICommService,\
     src/main/resources/
 
 -buildpath: \

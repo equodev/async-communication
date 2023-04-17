@@ -49,6 +49,10 @@ public class MessageHandler {
 
   private static MessageHandler instance;
 
+  /**
+   * Returns the HandlerContainer singleton.
+   * @return singleton instance
+   */
   public static MessageHandler getInstance() {
     if (instance == null) {
       instance = new MessageHandler();

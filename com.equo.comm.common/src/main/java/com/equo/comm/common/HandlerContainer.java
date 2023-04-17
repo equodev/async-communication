@@ -28,6 +28,10 @@ public class HandlerContainer {
 
   private static HandlerContainer instance;
 
+  /**
+   * Returns the HandlerContainer singleton.
+   * @return singleton instance
+   */
   public static HandlerContainer getInstance() {
     if (instance == null) {
       instance = new HandlerContainer();
@@ -92,6 +96,9 @@ public class HandlerContainer {
     removeActionParamType(actionId);
   }
 
+  /**
+   * Adds all action handlers associated with the parameter.
+   */
   public void addActionHandler(IActionHandler actionHandler) {
     for (Method method : actionHandler.getClass().getDeclaredMethods()) {
       final String actionHandlerName =
@@ -139,6 +146,9 @@ public class HandlerContainer {
     }
   }
 
+  /**
+   * Removes all action handlers associated with the parameter.
+   */
   public void removeActionHandler(IActionHandler actionHandler) {
     for (Method method : actionHandler.getClass().getDeclaredMethods()) {
       final String actionHandlerName =

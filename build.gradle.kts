@@ -8,4 +8,8 @@ allprojects {
   checkstyle {
     toolVersion = "8.43"
   }
+
+  repositories {
+      mavenCentral()
+  }
 }

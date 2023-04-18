@@ -22,7 +22,6 @@
 
 package com.equo.comm.ws.provider;
 
-import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -36,10 +35,6 @@ import java.util.function.Function;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
-import org.osgi.service.component.annotations.Activate;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Deactivate;
-import org.osgi.service.component.annotations.Reference;
 
 import com.equo.comm.api.error.CommMessageException;
 import com.equo.comm.common.HandlerContainer;
@@ -53,46 +48,38 @@ import com.equo.logging.client.api.LoggerFactory;
 /**
  * WebSocket server that relays messages to and from the event handler.
  */
-@Component(service = EquoWebSocketServer.class, immediate = true)
 public class EquoWebSocketServer extends WebSocketServer {
   protected static final Logger LOGGER = LoggerFactory.getLogger(EquoWebSocketServer.class);
 
-  @Reference
-  private MessageHandler messageHandler;
+  private MessageHandler messageHandler = MessageHandler.getInstance();
 
-  @Reference
-  private HandlerContainer handlerContainer;
+  private HandlerContainer handlerContainer = HandlerContainer.getInstance();
 
   private boolean firstClientConnected = false;
   private List<String> messagesToSend = new ArrayList<>();
 
   private volatile boolean started = false;
 
-  public EquoWebSocketServer() {
-    super(new InetSocketAddress(0));
+  private static final EquoWebSocketServer INSTANCE = new EquoWebSocketServer();
+
+  public static EquoWebSocketServer getInstance() {
+    return INSTANCE;
   }
 
   /**
    * Starts websocket server when the service is activated.
    */
-  @Activate
-  public void activate() {
+  private EquoWebSocketServer() {
+    super(new InetSocketAddress(0));
     LOGGER.info("Starting Equo websocket server...");
     start();
-  }
-
-  /**
-   * Stops websocket server when the service is deactivated.
-   */
-  @Deactivate
-  public void deactivate() {
-    LOGGER.info("Stopping Equo websocket server...");
-    try {
-      stop();
-    } catch (IOException | InterruptedException e) {
-      // TODO: retry?
-      e.printStackTrace();
-    }
+    Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+      try {
+        stop();
+      } catch (Exception e) {
+        // We tried...
+      }
+    }));
   }
 
   /**

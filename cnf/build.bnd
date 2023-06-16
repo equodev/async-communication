@@ -1,5 +1,7 @@
 Bundle-Version:             1.0.0.${tstamp}
 equo.license: https://equo.dev/eula
+project.description: Bidirectional communication between Java and JavaScript code based on events.
+project.feature: com.equo.comm.oss
 Bundle-License: ${def;license;${equo.license}}
 -include ${workspace}/gradle.properties
 

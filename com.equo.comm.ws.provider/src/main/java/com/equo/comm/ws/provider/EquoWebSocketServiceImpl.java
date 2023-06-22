@@ -29,9 +29,15 @@ import java.util.function.Function;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+import org.osgi.service.component.annotations.ReferencePolicyOption;
 
-import com.equo.comm.api.internal.EventMessage;
-import com.equo.comm.api.internal.IEventHandler;
+import com.equo.comm.api.ICommSendService;
+import com.equo.comm.api.ICommService;
+import com.equo.comm.api.actions.IActionHandler;
+import com.equo.comm.common.HandlerContainer;
+import com.equo.comm.common.entity.EventMessage;
 import com.equo.logging.client.api.Logger;
 import com.equo.logging.client.api.LoggerFactory;
 
@@ -40,29 +46,36 @@ import com.equo.logging.client.api.LoggerFactory;
  * all the event listeners.
  */
 @Component
-public class EquoWebSocketServiceImpl implements IEventHandler {
+public class EquoWebSocketServiceImpl implements ICommService, ICommSendService {
 
   protected static final Logger LOGGER = LoggerFactory.getLogger(EquoWebSocketServiceImpl.class);
 
-  @Reference
-  private EquoWebSocketServer equoWebSocketServer;
+  private EquoWebSocketServer equoWebSocketServer = EquoWebSocketServer.getInstance();
 
-  @Override
-  public <T> void addEventHandler(String eventId, Consumer<T> actionHandler,
+  private <T> void addEventHandler(String eventId, Consumer<T> actionHandler,
+      Class<?>... paramTypes) {
+    equoWebSocketServer.addEventHandler(eventId, actionHandler, paramTypes);
+  }
+
+  private <T, R> void addEventHandler(String eventId, Function<T, R> actionHandler,
       Class<?>... paramTypes) {
     equoWebSocketServer.addEventHandler(eventId, actionHandler, paramTypes);
   }
 
   @Override
-  public <T, R> void addEventHandler(String eventId, Function<T, R> actionHandler,
-      Class<?>... paramTypes) {
-    equoWebSocketServer.addEventHandler(eventId, actionHandler, paramTypes);
+  public void send(String userEvent) {
+    send(userEvent, (Object) null);
   }
 
   @Override
   public void send(String userEvent, Object payload) {
     EventMessage eventMessage = new EventMessage(userEvent, payload);
     equoWebSocketServer.send(eventMessage);
+  }
+
+  @Override
+  public <T> Future<T> send(String userEvent, Class<T> responseTypeClass) {
+    return send(userEvent, null, responseTypeClass);
   }
 
   @Override
@@ -84,8 +97,50 @@ public class EquoWebSocketServiceImpl implements IEventHandler {
     return equoWebSocketServer.getPort();
   }
 
-  @Override
   public void removeEventHandler(String actionId) {
     equoWebSocketServer.removeEventHandler(actionId);
   }
+
+  @Override
+  public <T, R> void on(String actionId, Class<T> payloadClass, Function<T, R> actionHandler) {
+    addEventHandler(actionId, actionHandler, payloadClass);
+  }
+
+  @Override
+  public <R> void on(String actionId, Function<String, R> actionHandler) {
+    addEventHandler(actionId, actionHandler, String.class);
+  }
+
+  @Override
+  public <T> void on(String actionId, Class<T> payloadClass, Consumer<T> actionHandler) {
+    addEventHandler(actionId, actionHandler, payloadClass);
+  }
+
+  @Override
+  public void on(String actionId, Consumer<String> actionHandler) {
+    addEventHandler(actionId, actionHandler, String.class);
+  }
+
+  public void remove(String actionId) {
+    equoWebSocketServer.removeEventHandler(actionId);
+  }
+
+  private HandlerContainer handlerContainer = HandlerContainer.getInstance();
+
+  /**
+   * Method used to add all the Action Handler implementations.
+   */
+  @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC,
+      policyOption = ReferencePolicyOption.GREEDY)
+  public void addActionHandler(IActionHandler actionHandler) {
+    handlerContainer.addActionHandler(actionHandler);
+  }
+
+  /**
+   * Method to release all actions defined in this action handler.
+   */
+  public void removeActionHandler(IActionHandler actionHandler) {
+    handlerContainer.removeActionHandler(actionHandler);
+  }
+
 }

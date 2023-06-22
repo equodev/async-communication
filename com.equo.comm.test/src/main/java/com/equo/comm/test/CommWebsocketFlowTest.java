@@ -2,12 +2,10 @@ package com.equo.comm.test;
 
 import java.lang.reflect.Method;
 
-import org.eclipse.swt.widgets.Display;
 import org.junit.Assert;
 import org.osgi.framework.ServiceReference;
 
-import com.equo.chromium.swt.Browser;
-import com.equo.comm.api.internal.IEventHandler;
+import com.equo.comm.api.ICommService;
 import com.equo.comm.common.test.CommNormalFlow;
 
 public class CommWebsocketFlowTest extends CommNormalFlow {
@@ -16,10 +14,10 @@ public class CommWebsocketFlowTest extends CommNormalFlow {
 
   protected int getWebsocketPort() {
     if (port == null) {
-      ServiceReference<IEventHandler> svcref = context.getServiceReference(IEventHandler.class);
+      ServiceReference<ICommService> svcref = context.getServiceReference(ICommService.class);
       Assert.assertNotNull(svcref);
 
-      IEventHandler commService = context.getService(svcref);
+      ICommService commService = context.getService(svcref);
       Assert.assertNotNull(commService);
 
       Class<?> serviceClass = commService.getClass();
@@ -35,11 +33,10 @@ public class CommWebsocketFlowTest extends CommNormalFlow {
   };
 
   @Override
-  protected void setResourceUrl(String resourcePath) {
-    final Browser browser = (Browser) components.get(0);
-    final Display display = Display.getDefault();
-    display.syncExec(() -> {
-      browser.setUrl("file://" + RESOURCES_DIR + resourcePath + "?equocommport=" + getWebsocketPort());
+  protected void setFileResourceUrl(String resourcePath) {
+    uiDispatch.syncExec(() -> {
+      currentBrowser
+          .setUrl("file://" + RESOURCES_DIR + resourcePath + "?equocommport=" + getWebsocketPort());
     });
   }
 

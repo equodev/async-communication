@@ -1,5 +1,9 @@
--include ${workspace}/gradle.properties
 Bundle-Version:             1.0.0.${tstamp}
+equo.license: https://equo.dev/eula
+project.description: Bidirectional communication between Java and JavaScript code based on events.
+project.feature: com.equo.comm.oss
+Bundle-License: ${def;license;${equo.license}}
+-include ${workspace}/gradle.properties
 
 # Needed for p2 repo generation
 -plugin.p2.AppLaunch: \
@@ -17,17 +21,12 @@ Bundle-Version:             1.0.0.${tstamp}
         poll.time = -1; \
         cache = ~/.bnd/cache/eclipse201912
 
--plugin.chromiumswt: \
-    aQute.bnd.repository.p2.provider.P2Repository; \
-    url = https://dl.equoplatform.com/chromium-swt-ee/equo/p2/swt/80.0.21/repository; \
-    name = "Chromium SWT"; \
-    location = ~/.bnd/cache/chromium-swt
-
--plugin.chromiumcef: \
-    aQute.bnd.repository.p2.provider.P2Repository; \
-    url = https://dl.equoplatform.com/chromium-swt-ee/equo/p2/cef/80.0.16/repository; \
-    name = "Chromium CEF"; \
- 	location = ~/.bnd/cache/chromium-cef
+-plugin.chromium: \
+    aQute.bnd.repository.osgi.OSGiRepository; \
+        name = "Chromium SWT+CEF"; \
+        locations = "https://dl.equo.dev/chromium-swt-ee/equo/mvn/index.xml.gz"; \
+        poll.time = -1; \
+        cache = ~/.bnd/cache/equo-chromium-swt
 
 -plugin.sdkcore: \
     aQute.bnd.repository.osgi.OSGiRepository; \
@@ -48,6 +47,13 @@ Bundle-Version:             1.0.0.${tstamp}
         locations = "https://dl.equoplatform.com/testing-commons/develop/repo/index.xml.gz"; \
         poll.time = -1; \
         cache = ~/.bnd/cache/testing-commons
+        
+-plugin.testing-commons: \
+    aQute.bnd.repository.osgi.OSGiRepository; \
+        name = "Testing Commons"; \
+        locations = "https://dl.equoplatform.com/testing-commons/develop/repo/index.xml.gz"; \
+        poll.time = -1; \
+        cache = ~/.bnd/cache/testing-commons
 
 -plugin.testing-commons-ext: \
     aQute.bnd.repository.osgi.OSGiRepository; \
@@ -57,3 +63,4 @@ Bundle-Version:             1.0.0.${tstamp}
         cache = ~/.bnd/cache/testing-commons-ext
 
 -buildrepo: BuildRepo
+-releaserepo.default: ${-buildrepo}

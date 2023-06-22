@@ -22,75 +22,78 @@
 
 package com.equo.comm.api;
 
-import java.util.concurrent.Future;
+import java.util.Iterator;
+import java.util.ServiceLoader;
 import java.util.function.Consumer;
 import java.util.function.Function;
+
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.ServiceReference;
 
 /**
  * Interface for event handlers. Allows to listen and send events.
  */
-public interface ICommService {
-
-  /**
-   * Sends a null data to later be transmitted using the userEvent as ID.
-   * @param userEvent the event ID.
-   */
-  public void send(String userEvent);
-
-  /**
-   * Sends the specified data to later be transmitted using the userEvent as ID.
-   * @param userEvent the event ID.
-   * @param payload   the data to send.
-   */
-  public void send(String userEvent, Object payload);
-
-  /**
-   * Sends a null data to later be transmitted using the userEvent as ID expecting
-   * a response.
-   * @param userEvent the event ID.
-   */
-  <T> Future<T> send(String userEvent, Class<T> responseTypeClass);
-
-  /**
-   * Sends the specified data to later be transmitted using the userEvent as ID
-   * expecting a response.
-   * @param userEvent the event ID.
-   * @param payload   the data to send.
-   */
-  <T> Future<T> send(String userEvent, Object payload, Class<T> responseTypeClass);
+public interface ICommService extends ICommSendService {
 
   /**
    * Defines a custom actionHandler for an specific event ID.
    * @param payloadClass  the event expected payload class.
    * @param actionHandler the action handler.
    */
-  <T, R> void on(String actionId, Class<T> payloadClass, Function<T, R> actionHandler);
+  public <T, R> void on(String actionId, Class<T> payloadClass, Function<T, R> actionHandler);
 
   /**
    * Defines a custom actionHandler for an specific event ID.
    * @param actionId      the event id.
    * @param actionHandler the action handler.
    */
-  <R> void on(String actionId, Function<String, R> actionHandler);
+  public <R> void on(String actionId, Function<String, R> actionHandler);
 
   /**
    * Defines a custom actionHandler for an specific event ID.
    * @param payloadClass  the event expected payload class.
    * @param actionHandler the action handler.
    */
-  <T> void on(String actionId, Class<T> payloadClass, Consumer<T> actionHandler);
+  public <T> void on(String actionId, Class<T> payloadClass, Consumer<T> actionHandler);
 
   /**
    * Defines a custom actionHandler for an specific event ID.
    * @param actionId      the event id.
    * @param actionHandler the action handler.
    */
-  void on(String actionId, Consumer<String> actionHandler);
+  public void on(String actionId, Consumer<String> actionHandler);
 
   /**
    * Removes an event handler.
    * @param actionId the action ID associated with the handler to remove.
    */
   void remove(String actionId);
+
+  /**
+   * Tries to find a reference to the service via all supported mechanisms.
+   * @return A reference to the service if found, null otherwise.
+   */
+  public static ICommService findServiceReference() {
+    try {
+      BundleContext ctx = FrameworkUtil.getBundle(ICommService.class).getBundleContext();
+      if (ctx != null) {
+        ServiceReference<ICommService> serviceReference =
+            ctx.getServiceReference(ICommService.class);
+        if (serviceReference != null) {
+          return ctx.getService(serviceReference);
+        }
+      }
+    } catch (Exception e) {
+      // Non-OSGi environments
+    }
+
+    ServiceLoader<ICommService> serviceLoader = ServiceLoader.load(ICommService.class);
+    Iterator<ICommService> it = serviceLoader.iterator();
+    if (it.hasNext()) {
+      return it.next();
+    }
+    return null;
+  }
 
 }

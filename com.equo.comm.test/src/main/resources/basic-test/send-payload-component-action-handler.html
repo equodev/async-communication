@@ -12,9 +12,13 @@
     <script src="../../../../../com.equo.comm.ws.provider/src/main/resources/equo-comm.js"></script>
     <script>
         EquoCommService.on("transfer", () => {
-            throw "some message";
+            EquoCommService.send("testHandler", "test").then(response => {
+                if (response === "test1") {
+                    EquoCommService.send("successTransferComponentActionHandler")
+                }
+            })
         });
-        EquoCommService.send("_startTransferSendError");
+        EquoCommService.send("_startTransferComponentActionHandler");
     </script>
 </body>
 

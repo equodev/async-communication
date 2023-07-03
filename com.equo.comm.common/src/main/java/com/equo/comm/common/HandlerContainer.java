@@ -3,9 +3,9 @@ package com.equo.comm.common;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -19,12 +19,12 @@ import com.equo.comm.common.util.Pair;
  */
 public class HandlerContainer {
 
-  private Map<String, Function<?, ?>> functionActionHandlers = new HashMap<>();
-  private Map<String, Consumer<?>> consumerActionHandlers = new HashMap<>();
-  private Map<String, Class<?>> actionParamTypes = new HashMap<>();
+  private Map<String, Function<?, ?>> functionActionHandlers = new ConcurrentHashMap<>();
+  private Map<String, Consumer<?>> consumerActionHandlers = new ConcurrentHashMap<>();
+  private Map<String, Class<?>> actionParamTypes = new ConcurrentHashMap<>();
 
   private Map<String, Pair<CompletableFuture<?>, Class<?>>> responseActionHandlers =
-      new HashMap<>();
+      new ConcurrentHashMap<>();
 
   private static HandlerContainer instance;
 

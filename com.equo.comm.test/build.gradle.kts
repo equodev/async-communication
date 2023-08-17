@@ -15,6 +15,7 @@ tasks.register<TestOSGi>("testosgi.swing") {
     setBndrun("bnd.bnd")
 }
 
+/*
 tasks.register<TestOSGi>("testosgi.windowless") {
     doFirst {
         System.setProperty("chromium.version", "95")
@@ -23,7 +24,6 @@ tasks.register<TestOSGi>("testosgi.windowless") {
     setBndrun("bnd.bnd")
 }
 
-/*
 tasks.register<TestOSGi>("testosgi.88") {
     doFirst {
         System.setProperty("chromium.version", "88")

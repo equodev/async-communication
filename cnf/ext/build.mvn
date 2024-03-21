@@ -4,6 +4,6 @@ org.osgi:osgi.core:7.0.0
 org.osgi:osgi.cmpn:7.0.0
 
 org.java-websocket:Java-WebSocket:jar:1.5.1
-com.google.code.gson:gson:2.8.9
+com.google.code.gson:gson:2.10.1
 
 org.apache.felix:org.apache.felix.framework:7.0.5

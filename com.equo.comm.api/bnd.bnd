@@ -2,8 +2,8 @@ Bundle-Version: 3.0.1.${tstamp}
 Bundle-ActivationPolicy: lazy
 
 -buildpath: \
-    osgi.cmpn,\
-    osgi.core
+    osgi.cmpn;maven-optional=true,\
+    osgi.core;maven-optional=true
 
 Export-Package: \
     com.equo.comm.api,\

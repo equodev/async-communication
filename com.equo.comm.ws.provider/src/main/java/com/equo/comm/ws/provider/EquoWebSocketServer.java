@@ -42,15 +42,11 @@ import com.equo.comm.common.MessageHandler;
 import com.equo.comm.common.entity.EventErrorMessage;
 import com.equo.comm.common.entity.EventMessage;
 import com.equo.comm.common.util.Pair;
-import com.equo.logging.client.api.Logger;
-import com.equo.logging.client.api.LoggerFactory;
 
 /**
  * WebSocket server that relays messages to and from the event handler.
  */
 public class EquoWebSocketServer extends WebSocketServer {
-  protected static final Logger LOGGER = LoggerFactory.getLogger(EquoWebSocketServer.class);
-
   private MessageHandler messageHandler = MessageHandler.getInstance();
 
   private HandlerContainer handlerContainer = HandlerContainer.getInstance();
@@ -71,7 +67,7 @@ public class EquoWebSocketServer extends WebSocketServer {
    */
   private EquoWebSocketServer() {
     super(new InetSocketAddress(0));
-    LOGGER.info("Starting Equo websocket server...");
+    Logger.debug("Starting Equo websocket server...");
     start();
     Runtime.getRuntime().addShutdownHook(new Thread(() -> {
       try {
@@ -132,8 +128,7 @@ public class EquoWebSocketServer extends WebSocketServer {
 
   @Override
   public void onOpen(WebSocket conn, ClientHandshake handshake) {
-    LOGGER.debug(
-        conn.getRemoteSocketAddress().getAddress().getHostAddress() + " entered the Equo SDK!");
+    Logger.debug(conn.getRemoteSocketAddress().getAddress().getHostAddress() + " entered the Equo SDK!");
     this.firstClientConnected = true;
     synchronized (messagesToSend) {
       for (String messageToSend : messagesToSend) {
@@ -145,7 +140,7 @@ public class EquoWebSocketServer extends WebSocketServer {
 
   @Override
   public void onClose(WebSocket conn, int code, String reason, boolean remote) {
-    LOGGER.debug(conn + " has left the Equo SDK!");
+    Logger.debug(conn + " has left the Equo SDK!");
     broadcast(conn + " has left the Equo SDK!");
   }
 
@@ -181,13 +176,13 @@ public class EquoWebSocketServer extends WebSocketServer {
 
   @Override
   public void onMessage(WebSocket conn, String message) {
-    LOGGER.debug(conn + ": " + message);
+    Logger.debug(conn + ": " + message);
     receiveMessage(message, true);
   }
 
   @Override
   public void onMessage(WebSocket conn, ByteBuffer message) {
-    LOGGER.debug(conn + ": " + message);
+    Logger.debug(conn + ": " + message);
     broadcast(message.array());
   }
 
@@ -204,7 +199,7 @@ public class EquoWebSocketServer extends WebSocketServer {
   public void onStart() {
     // TODO log web socket server started
     this.started = true;
-    LOGGER.info("Equo Websocket Server started!");
+    Logger.debug("Equo Websocket Server started!");
   }
 
   @Override

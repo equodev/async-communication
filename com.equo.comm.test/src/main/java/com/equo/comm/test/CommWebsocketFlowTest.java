@@ -36,7 +36,7 @@ public class CommWebsocketFlowTest extends CommNormalFlow {
   protected void setFileResourceUrl(String resourcePath) {
     uiDispatch.syncExec(() -> {
       currentBrowser
-          .setUrl("file://" + RESOURCES_DIR + resourcePath + "?equocommport=" + getWebsocketPort());
+          .setUrl("file://" + RESOURCES_DIR + resourcePath + "?equoCommPort=" + getWebsocketPort());
     });
   }
 

@@ -84,7 +84,7 @@ public interface ICommService extends ICommSendService {
           return ctx.getService(serviceReference);
         }
       }
-    } catch (Exception e) {
+    } catch (Throwable e) {
       // Non-OSGi environments
     }
 

@@ -38,8 +38,6 @@ import com.equo.comm.api.ICommService;
 import com.equo.comm.api.actions.IActionHandler;
 import com.equo.comm.common.HandlerContainer;
 import com.equo.comm.common.entity.EventMessage;
-import com.equo.logging.client.api.Logger;
-import com.equo.logging.client.api.LoggerFactory;
 
 /**
  * Websocket service implementation. Manages the websocket server lifecycle and
@@ -47,9 +45,6 @@ import com.equo.logging.client.api.LoggerFactory;
  */
 @Component
 public class EquoWebSocketServiceImpl implements ICommService, ICommSendService {
-
-  protected static final Logger LOGGER = LoggerFactory.getLogger(EquoWebSocketServiceImpl.class);
-
   private EquoWebSocketServer equoWebSocketServer = EquoWebSocketServer.getInstance();
 
   private <T> void addEventHandler(String eventId, Consumer<T> actionHandler,
@@ -142,5 +137,4 @@ public class EquoWebSocketServiceImpl implements ICommService, ICommSendService 
   public void removeActionHandler(IActionHandler actionHandler) {
     handlerContainer.removeActionHandler(actionHandler);
   }
-
 }

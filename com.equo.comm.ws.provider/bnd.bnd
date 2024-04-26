@@ -1,4 +1,4 @@
-Bundle-Version: 2.0.2.${tstamp}
+Bundle-Version: 3.0.0.${tstamp}
 Private-Package: \
     com.equo.comm.ws.provider.entity
 

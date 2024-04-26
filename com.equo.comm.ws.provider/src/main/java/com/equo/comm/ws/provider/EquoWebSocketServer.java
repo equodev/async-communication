@@ -128,7 +128,8 @@ public class EquoWebSocketServer extends WebSocketServer {
 
   @Override
   public void onOpen(WebSocket conn, ClientHandshake handshake) {
-    Logger.debug(conn.getRemoteSocketAddress().getAddress().getHostAddress() + " entered the Equo SDK!");
+    Logger.debug(
+        conn.getRemoteSocketAddress().getAddress().getHostAddress() + " entered the Equo SDK!");
     this.firstClientConnected = true;
     synchronized (messagesToSend) {
       for (String messageToSend : messagesToSend) {
